@@ -13,11 +13,18 @@ class CRUD:
                     return json.load(db)
         except JSONDecodeError:
             return []
+        except FileNotFoundError:
+            with open('db.json', 'w') as db:
+                return []
         
     def get_object(self, uid):
-        with open('db.json', 'r') as db:
-            for user in json.load(db):
-                if uid == user['uid']:
-                    return user
-            return None
+        try:
+            with open('db.json', 'r') as db:
+                for user in json.load(db):
+                    if uid == user['uid']:
+                        return user
+                return None
+        except FileNotFoundError:
+            with open('db.json', 'w') as db:
+                return None
 
